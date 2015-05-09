@@ -1,0 +1,17 @@
+AS  := $(CROSS)as
+CXX := $(CROSS)g++$(GCC_VERSION)
+CC  := $(CROSS)gcc$(GCC_VERSION)
+
+NEON_A9 := -mfpu=neon -mfloat-abi=hard -mcpu=cortex-a9
+
+
+!cxx = |> $(CXX) $(CXXFLAGS) $(CPUFLAGS) $(INCLUDES) $(DEFINES) -c %f -o %o |>
+!cc  = |> $(CC) $(CFLAGS) $(CPUFLAGS) $(INCLUDES) $(DEFINES) -c %f -o %o |>
+
+# usefull for single file apps
+!cxx_app = |> $(CXX) $(CXXFLAGS) $(CPUFLAGS) $(INCLUDES) $(DEFINES) %f $(LIBS) -o %o |>
+
+!link_so  = |> $(CXX) %f -shared -o %o $(LIBS) |>
+!link_app = |> $(CXX) %f -o %o $(LIBS) |>
+!ar       = |> ar rs %o %f |>
+

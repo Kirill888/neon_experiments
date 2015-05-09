@@ -1,0 +1,15 @@
+include_rules
+
+CPUFLAGS += $(NEON_A9)
+
+CXXFLAGS += -std=c++11
+CXXFLAGS += -Wall -Wextra
+CXXFLAGS += -O3
+
+#DEFINES += -DNDEBUG
+
+LIBS += -static-libgcc -static -lstdc++
+LIBS += -lm
+
+
+: scratch.cc |> !cxx_app |> test_scratch
