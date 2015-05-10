@@ -29,6 +29,24 @@ int main(int argc, char *argv[])
      xx = vset_lane_u16(0x2222, xx, 1);
      print(" %04hx", xx); printf("\n");
 
+     {
+	 int i = 0;
+	 neon::for_each(xx,
+			[&i](uint16_t a)->void
+			{
+			    printf("%d: %04hx\n", i++, a);
+			}
+			);
+     }
+
+     {
+	 neon::apply<void>
+	     ([](uint16_t a0,uint16_t a1,uint16_t a2,uint16_t a3)->void
+	     {
+		 printf("xx: %04hx %04hx %04hx %04hx\n", a0, a1, a2, a3);
+	     }, xx);
+     }
+
      auto y = vreinterpret_u64_u16(x);
      print(" %016llx", y); printf("\n");
 
@@ -38,7 +56,7 @@ int main(int argc, char *argv[])
      {
 	 int bit_shift = i*2*8;
 
-	 auto sh = neon::build<int64_t>(bit_shift - 64, bit_shift);
+	 auto sh = neon::build<int64_t>(bit_shift , bit_shift - 64);
 
 	 auto _y = vshlq_u64(yy,sh);
 

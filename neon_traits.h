@@ -10,6 +10,11 @@ namespace neon
 	template<typename T, int> struct vec;
 	template<typename T> struct elem;
 
+	template<> struct vec<float,4     >{typedef float32x4_t type;};
+	template<> struct vec<float,2     >{typedef float32x2_t type;};
+	template<> struct elem<float32x4_t>{typedef float       type;};
+	template<> struct elem<float32x2_t>{typedef float       type;};
+
 #define MK_TRAIT(base,N)\
 	template<> struct vec<base##_t,N> {typedef base##x##N##_t type;};\
 	template<> struct elem<base##x##N##_t>{typedef base##_t type;};

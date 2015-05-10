@@ -78,4 +78,106 @@ namespace neon
 	return (typename traits::vec<T,N>::type)(x);
     }
 
+    namespace detail
+    {
+	template<int N> struct impl;
+
+	template<>struct impl<1>
+	{
+	    template<typename T, typename Function>
+	    static void for_each(T vec, Function f)
+	    {
+		f( get<0>(vec) );
+	    }
+
+	    template<typename R, typename T, typename Function>
+	    static R apply(Function f, T vec)
+	    {
+		return f( get<0>(vec) );
+	    }
+	};
+
+	template<>struct impl<2>
+	{
+	    template<typename T, typename Function>
+	    static void for_each(T vec, Function f)
+	    {
+		f( get<0>(vec));
+		f( get<1>(vec));
+	    }
+
+	    template<typename R, typename T, typename Function>
+	    static R apply(Function f, T vec)
+	    {
+		return f( get<0>(vec), get<1>(vec) );
+	    }
+	};
+
+	template<>struct impl<4>
+	{
+	    template<typename T, typename Function>
+	    static void for_each(T vec, Function f)
+	    {
+		f( get<0>(vec)); f( get<1>(vec)); f( get<2>(vec)); f( get<3>(vec));
+	    }
+
+	    template<typename R, typename T, typename Function>
+	    static R apply(Function f, T vec)
+	    {
+		return f( get<0>(vec), get<1>(vec), get<2>(vec), get<3>(vec) );
+	    }
+	};
+
+	template<>struct impl<8>
+	{
+	    template<typename T, typename Function>
+	    static void for_each(T vec, Function f)
+	    {
+		f( get<0>(vec)); f( get<1>(vec)); f( get<2>(vec)); f( get<3>(vec));
+		f( get<4>(vec)); f( get<5>(vec)); f( get<6>(vec)); f( get<7>(vec));
+	    }
+
+	    template<typename R, typename T, typename Function>
+	    static R apply(Function f, T vec)
+	    {
+		return f( get<0>(vec), get<1>(vec), get<2>(vec), get<3>(vec),
+			  get<4>(vec), get<5>(vec), get<6>(vec), get<7>(vec));
+	    }
+	};
+
+	template<>struct impl<16>
+	{
+	    template<typename T, typename Function>
+	    static void for_each(T vec, Function f)
+	    {
+		f( get< 0>(vec)); f( get< 1>(vec)); f( get< 2>(vec)); f( get< 3>(vec));
+		f( get< 4>(vec)); f( get< 5>(vec)); f( get< 6>(vec)); f( get< 7>(vec));
+		f( get< 8>(vec)); f( get< 9>(vec)); f( get<10>(vec)); f( get<11>(vec));
+		f( get<12>(vec)); f( get<13>(vec)); f( get<14>(vec)); f( get<15>(vec));
+	    }
+
+	    template<typename R, typename T, typename Function>
+	    static R apply(Function f, T vec)
+	    {
+		return f( get< 0>(vec), get< 1>(vec), get< 2>(vec), get< 3>(vec),
+			  get< 4>(vec), get< 5>(vec), get< 6>(vec), get< 7>(vec),
+			  get< 8>(vec), get< 9>(vec), get<10>(vec), get<11>(vec),
+			  get<12>(vec), get<13>(vec), get<14>(vec), get<15>(vec));
+	    }
+	};
+    }
+
+    template<typename T, typename Function>
+    void for_each(T vec, Function f)
+    {
+	const int N = traits::num<T>::val;
+	detail::impl<N>::template for_each(vec,f);
+    }
+
+    template<typename R, typename T, typename Function>
+    R apply(Function f, T vec)
+    {
+	const int N = traits::num<T>::val;
+	return detail::impl<N>::template apply<R>(f,vec);
+    }
 }
