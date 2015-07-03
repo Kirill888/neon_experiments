@@ -45,6 +45,7 @@ templates where necessary.
 There are still some problems to address
 
 1. Handling of immediate values
+
    Generated code for neon intrinsics that use immediate values will
    not compile with -O0 settings by gcc, since constants don't get
    propagated through C++ shim boundary. Annoyingly it does compile
@@ -53,6 +54,7 @@ There are still some problems to address
    func(...)" kind of code for that case.
 
 2. Tests
+
    There are none, which is obviously a problem. Given that there are
    1870 intrinsics in 159 groups it's not exactly clear how to go
    about testing this thing beyond simple manual inspection of
